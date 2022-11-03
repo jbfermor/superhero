@@ -3,14 +3,14 @@ class ReviewsController < ApplicationController
 
   # GET /reviews
   def index
-    @reviews = Review.all
+    @reviews = current_user.reviews
 
-    render json: @reviews
+    render json: HeroSerializer.new(@reviews)
   end
 
   # GET /reviews/1
   def show
-    render json: @review
+    render json: HeroSerializer.new(@review)
   end
 
   # POST /reviews
@@ -18,7 +18,8 @@ class ReviewsController < ApplicationController
     @review = Review.new(review_params)
 
     if @review.save
-      render json: @review, status: :created, location: @review
+      update_hero(@review.score )
+      render json: HeroSerializer.new(@review), status: :created, location: @review
     else
       render json: @review.errors, status: :unprocessable_entity
     end
@@ -26,8 +27,9 @@ class ReviewsController < ApplicationController
 
   # PATCH/PUT /reviews/1
   def update
-    if @review.update(review_params)
-      render json: @review
+    if @review.update( review_params )
+      update_hero(@review.score )
+      render json: HeroSerializer.new(@review)
     else
       render json: @review.errors, status: :unprocessable_entity
     end
@@ -41,11 +43,18 @@ class ReviewsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_review
-      @review = Review.find(params[:id])
+      @review = Review.find(params[ :id ])
     end
 
     # Only allow a list of trusted parameters through.
     def review_params
-      params.require(:review).permit(:text, :score, :user_id, :hero_id)
+      params.require(:review).permit( :text, :score, :user_id, :hero_id )
     end
+
+    def update_hero(score)
+      hero = Hero.find(hero_id)
+      hero.update_hero_score(score)
+    end
+
+   
 end

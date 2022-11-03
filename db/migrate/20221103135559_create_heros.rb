@@ -5,7 +5,7 @@ class CreateHeros < ActiveRecord::Migration[7.0]
       t.string :real_name
       t.string :universe
       t.text :bio
-      t.integer :score
+      t.integer :score, default: 0
 
       t.timestamps
     end

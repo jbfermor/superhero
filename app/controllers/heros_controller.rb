@@ -5,12 +5,12 @@ class HerosController < ApplicationController
   def index
     @heros = Hero.all
 
-    render json: @heros
+    render json: HeroSerializer.new(@heros)
   end
 
   # GET /heros/1
   def show
-    render json: @hero
+    render json: HeroSerializer.new(@hero)
   end
 
   # POST /heros
@@ -18,7 +18,7 @@ class HerosController < ApplicationController
     @hero = Hero.new(hero_params)
 
     if @hero.save
-      render json: @hero, status: :created, location: @hero
+      render json: HeroSerializer.new(@hero), status: :created, location: @hero
     else
       render json: @hero.errors, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class HerosController < ApplicationController
   # PATCH/PUT /heros/1
   def update
     if @hero.update(hero_params)
-      render json: @hero
+      render json: HeroSerializer.new(@hero)
     else
       render json: @hero.errors, status: :unprocessable_entity
     end
