@@ -3,6 +3,7 @@ class ReviewsController < ApplicationController
 
   # GET /reviews
   def index
+    #Only get the current_user reviews, not all. The user can read other reviews in the heros page
     @reviews = current_user.reviews
 
     render json: ReviewSerializer.new(@reviews)
