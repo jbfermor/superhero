@@ -5,12 +5,12 @@ class ReviewsController < ApplicationController
   def index
     @reviews = current_user.reviews
 
-    render json: HeroSerializer.new(@reviews)
+    render json: ReviewSerializer.new(@reviews)
   end
 
   # GET /reviews/1
   def show
-    render json: HeroSerializer.new(@review)
+    render json: ReviewSerializer.new(@review)
   end
 
   # POST /reviews
@@ -19,7 +19,7 @@ class ReviewsController < ApplicationController
 
     if @review.save
       update_hero(@review.score )
-      render json: HeroSerializer.new(@review), status: :created, location: @review
+      render json: ReviewSerializer.new(@review), status: :created, location: @review
     else
       render json: @review.errors, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class ReviewsController < ApplicationController
   def update
     if @review.update( review_params )
       update_hero(@review.score )
-      render json: HeroSerializer.new(@review)
+      render json: ReviewSerializer.new(@review)
     else
       render json: @review.errors, status: :unprocessable_entity
     end
